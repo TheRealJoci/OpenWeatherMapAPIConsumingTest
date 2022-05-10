@@ -1,51 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import useFetch from "../hooks/useFetch";
 import { GeoCode, WeatherData } from "../lib";
 
 const App = () => {
-  const [userInput, setUserInput] = useState<string>("");
-  const [geoCode, setGeoCode] = useState<GeoCode | null>(null);
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [geoCode, setGeoCodeQuery] = useFetch<GeoCode>();
+  const [weatherData, setWeatherDataQuery] = useFetch<WeatherData>();
 
   const onSubmitHandle = (event: any) => {
     event.preventDefault();
     const input = event.target.input.value;
-    if (input !== "") {
-      setUserInput(input);
-    }
     event.target.input.value = "";
-  };
-
-  const fetchData = (url: string, stateSetter: CallableFunction) => {
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      })
-      .then((data) => {
-        if (data.length) {
-          stateSetter(data[0]);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    if (userInput !== "") {
-      const url = `http://api.openweathermap.org/geo/1.0/direct?q=${userInput}&limit=1&appid=${process.env.REACT_APP_API_KEY}`;
-      fetchData(url, setGeoCode);
-    }
-  }, [userInput]);
-
-  useEffect(() => {
+    setGeoCodeQuery(
+      `http://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=1&appid=${process.env.REACT_APP_API_KEY}`
+    );
     if (geoCode !== null) {
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${geoCode.lat}&lon=${geoCode.lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
-      fetchData(url, setWeatherData);
+      setWeatherDataQuery(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${geoCode.lat}&lon=${geoCode.lon}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
+      );
     }
-  }, [geoCode]);
+  };
 
   return (
     <div>
