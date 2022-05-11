@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
+import useUrlMaker from "./useUrlMaker";
 
 function useFetch<I>() {
   const [data, setData] = useState<I | null>(null);
-  const [query, setQuery] = useState("");
+  const [url, setUrl] = useUrlMaker();
 
   useEffect(() => {
-    if (query) {
-      fetch(query)
+    if (url) {
+      fetch(url)
         .then((response) => {
           if (response.ok) {
             return response.json();
@@ -22,9 +23,9 @@ function useFetch<I>() {
           console.log(error);
         });
     }
-  }, [query]);
+  }, [url]);
 
-  return [data, setQuery] as const;
+  return [data, setUrl] as const;
 }
 
 export default useFetch;
