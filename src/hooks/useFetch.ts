@@ -14,8 +14,10 @@ function useFetch<I>() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         })
         .then((payload) => {
-          if (payload.length !== 0) {
+          if (payload.length !== undefined) {
             setData(payload[0]);
+          } else {
+            setData(payload);
           }
         })
         .catch((error) => {

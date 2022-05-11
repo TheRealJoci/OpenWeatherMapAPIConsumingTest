@@ -33,7 +33,6 @@ const App = () => {
       </form>
       <p>{JSON.stringify(geoCode, null, "\t")}</p>
       <p>{JSON.stringify(weatherData, null, "\t")}</p>
-      <p>{JSON.stringify(weatherData, null, "\t")}</p>
     </div>
   );
 };
