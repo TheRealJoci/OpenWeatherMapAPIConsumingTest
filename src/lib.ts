@@ -1,10 +1,11 @@
-export interface GeoCode {
+export interface GeoCodeData {
   name: string;
   local_names: Object;
   lat: number;
   lon: number;
   country: string;
   state?: string;
+  _type: "GeoCode";
 }
 
 export interface WeatherData {
@@ -47,4 +48,5 @@ export interface WeatherData {
   id: number;
   name: string;
   cod: string;
+  _type: "WeatherData";
 }

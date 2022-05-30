@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import useUrlMaker from "./useUrlMaker";
+import useCreateQuery from "./useCreateQuery";
 
 function useFetch<I>() {
   const [data, setData] = useState<I | null>(null);
-  const [url, setUrl] = useUrlMaker();
+  const [url, queryType, createQuery] = useCreateQuery();
 
   useEffect(() => {
     if (url) {
@@ -15,17 +15,24 @@ function useFetch<I>() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         })
         .then((payload) => {
-          if (payload.length !== 0) {
-            setData(payload[0]);
+          switch (queryType.current) {
+            case "GeoCode":
+              setData(payload[0]);
+              break;
+            case "Weather":
+              setData(payload);
+              break;
+            default:
+              break;
           }
         })
         .catch((error) => {
           console.log(error);
         });
     }
-  }, [url]);
+  }, [url, queryType]);
 
-  return [data, setUrl] as const;
+  return [data, createQuery] as const;
 }
 
 export default useFetch;
