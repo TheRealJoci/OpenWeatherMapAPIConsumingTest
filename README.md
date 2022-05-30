@@ -1,4 +1,4 @@
-# OpenWeatherMap API fetch test
+# React custom hooks exercise
 
 ## Exercise description
 
